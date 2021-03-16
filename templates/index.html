@@ -1,0 +1,88 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}iSIM Configurator v1{% endblock %}
+
+{% block styles %}
+{{super()}}
+<!--<link rel="stylesheet" href="{{ url_for('static', filename= 'css/normalize.css') }}">-->
+
+{% endblock %}
+
+
+
+{% block scripts %}
+<!-- <script type="text/javascript" src="{{ url_for('static', filename= 'js/modernizr-2.6.2.min.js') }}">	</script> -->
+
+{{super()}}
+{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-fixed-top">
+  <!-- ... -->
+</div>
+{% endblock %}
+
+{% block content %}
+<style type="text/css">
+<!--
+#wizard {
+width:960px;
+}
+-->
+</style>
+<form method="POST">
+    <div align="center">
+    <div id="wizard">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tbody>
+          <tr>
+            <td width="30%" height="30">Installation type:</td>
+            <td>
+            <input type="radio" name="installationtype" id="radio" value="online">
+            <label for="radio">Online </label>
+            <input type="radio" name="installationtype" id="radio" value="offline">
+            <label for="radio">Offline </label>		  
+            </td>
+          </tr>
+          <tr>
+            <td height="30">Repo Url:</td>
+            <td><input type="text" name="textfield" id="textfield"></td>
+          </tr>
+          <tr>
+            <td height="30">&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td colspan="2"><p>Module Settings:</p>
+              <div align="right"><input type="button" value="Add New Row" /></div>
+              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tbody>
+                  <tr>
+                    <td width="50%">Module Name</td>
+                    <td>Value</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td><input type="text" name="key" value="" /></td>
+                    <td><input type="text" name="value" value="" /></td>
+                    <td><input type="button" name="deleterow" value="Delete" /></td>
+                  </tr>
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                </tbody>
+              </table>
+            <p>
+              <label for="fileField">Module config file:</label>
+              <input type="file" name="fileField" id="fileField">
+            </p>
+            <p>
+              <input type="submit" name="submit" id="submit" value="Submit">
+            </p></td>
+          </tr>
+        </tbody>
+      </table></div></div>
+    </form>      
+    {% endblock %}
+
