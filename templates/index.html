@@ -1,5 +1,5 @@
 {% extends "bootstrap/base.html" %}
-{% block title %}iSIM Configurator v1{% endblock %}
+{% block title %}iSIM k8s Configurator v1{% endblock %}
 
 {% block styles %}
 {{super()}}
@@ -16,73 +16,305 @@
 {% endblock %}
 
 {% block navbar %}
-<div class="navbar navbar-fixed-top">
-  <!-- ... -->
+<div class="navbar navbar-fixed-down">
+    <div class="container h-100">
+        <div class="row h-100 justify-content-center align-items-center">
+  <div class="page-header">
+    <h1>iSIM k8s Configurator <small>v1</small></h1>
+  </div>  
+</div>
+</div>  
 </div>
 {% endblock %}
 
 {% block content %}
 <style type="text/css">
 <!--
-#wizard {
-width:960px;
+
+#output {
+    height: 400px;
+    overflow-x: hidden;
 }
 -->
 </style>
+
+
+
+
+<div class="container h-100">
+  <div class="row h-100 justify-content-center align-items-center">
 <form method="POST">
-    <div align="center">
-    <div id="wizard">
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-        <tbody>
-          <tr>
-            <td width="30%" height="30">Installation type:</td>
-            <td>
-            <input type="radio" name="installationtype" id="radio" value="online">
-            <label for="radio">Online </label>
-            <input type="radio" name="installationtype" id="radio" value="offline">
-            <label for="radio">Offline </label>		  
-            </td>
-          </tr>
-          <tr>
-            <td height="30">Repo Url:</td>
-            <td><input type="text" name="textfield" id="textfield"></td>
-          </tr>
-          <tr>
-            <td height="30">&nbsp;</td>
-            <td>&nbsp;</td>
-          </tr>
-          <tr>
-            <td colspan="2"><p>Module Settings:</p>
-              <div align="right"><input type="button" value="Add New Row" /></div>
-              <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                <tbody>
-                  <tr>
-                    <td width="50%">Module Name</td>
-                    <td>Value</td>
-                    <td>&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td><input type="text" name="key" value="" /></td>
-                    <td><input type="text" name="value" value="" /></td>
-                    <td><input type="button" name="deleterow" value="Delete" /></td>
-                  </tr>
-                  <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                  </tr>
-                </tbody>
-              </table>
-            <p>
-              <label for="fileField">Module config file:</label>
-              <input type="file" name="fileField" id="fileField">
-            </p>
-            <p>
-              <input type="submit" name="submit" id="submit" value="Submit">
-            </p></td>
-          </tr>
-        </tbody>
-      </table></div></div>
-    </form>      
+    <div class="form-group text-right">
+        <button type="button" class="btn btn-primary">Next</button>
+    </div>
+    <div class="form-group">
+        <label>Installation Type:</label><br />
+        <label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Online
+</label>
+<label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Offline
+</label>
+  </div>
+    <div class="form-group">
+    <label for="repourl">Repo Url:</label>
+    <input type="repourl" class="form-control" id="repourl" placeholder="<url> or <folder>">
+  </div>
+  <div class="form-group" style="overflow-y: scroll; height:400px">
+    <table class="table table-striped table-bordered">
+    <tr>
+        <th>Module Name</th>
+        <th>Value</th>
+        <th></th>                
+    </tr>
+    <tr>  <td>arangodb</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>bluetooth-engine</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>bluetooth-integrator</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>cabinet-engine</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>cabinet-integration</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>connectors</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>coturn</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>dmiintegstring</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>dms-engine</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>domainname</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>elasticsearch</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>erebor</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>geoserver</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>hayda-engine</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>hayda-integration</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>haydaintegstring</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>imanager</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>isimbackups</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>isimcdn</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>isimclient</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>isimcore</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>isimdbstr</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>isim-print-server</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>kafka-connect</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>kibana</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>kurento</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>kurento-room-server</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>librenms</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>loglevel</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>logstash</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>lomanager</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>mongo</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>mosquitto</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>multusnet</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>nazgul</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>nominatim</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>nova</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>novapp</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>ntpproxy</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>ntpserver</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>optimusprime</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>plato</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>postgis</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>prometheus</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>redis</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>reimdall</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>rest-proxy</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>riemann</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>riemanngo</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>riemanngostorage</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>riemannnvr</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>riemannui</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>saruman</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>sslenabled</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>videogw</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>videogwdotnet</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>videogwinteg</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>weyland</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>zonemanager</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+<tr>  <td>zookeeper</td>  <td>  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search">
+  </div></td>  <td> <p class="text-center"><button type="button" class="btn btn-primary btn-xs">Delete</button></p>
+</td></tr>
+
+</table>
+</div>
+<div class="form-group">
+    <button type="button" class="btn btn-primary">Save</button>
+</div>
+</form>
+</div>
+</div>
     {% endblock %}
 
