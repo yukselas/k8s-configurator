@@ -13,6 +13,11 @@ def index():
         return 'Go to next step!'     
     return render_template('index.html')
 
+@app.route('/step-2/ip-configuration', methods=['GET', 'POST'])
+def step2():
+    if request.method == 'POST':
+        return 'Go to next step!'     
+    return render_template('step-2-ip-configuration.html')    
 
 @app.route( '/stream' )
 def stream():
