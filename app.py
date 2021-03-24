@@ -19,6 +19,18 @@ def step2():
         return 'Go to next step!'     
     return render_template('step-2-ip-configuration.html')    
 
+@app.route('/step-3/review-configuration', methods=['GET', 'POST'])
+def step3():
+    if request.method == 'POST':
+        return 'Go to next step!'     
+    return render_template('step-3-review-configuration.html')  
+
+@app.route('/step-4/perform-installation', methods=['GET', 'POST'])
+def step4():
+    if request.method == 'POST':
+        return 'Go to next step!'     
+    return render_template('step-4-perform-installation.html') 
+
 @app.route( '/stream' )
 def stream():
     g = proc.Group()
