@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, Response
 from flask_bootstrap import Bootstrap
 from shelljob import proc
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Column, ForeignKey, Integer, String, Text
+from sqlalchemy import create_engine
+
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -11,11 +14,35 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ks8_configurator.db'
 
 
 db = SQLAlchemy(app)
+class k8sconfig(db.Model):
+    id = Column(Integer, primary_key=True)
+    name = Column(String(250), nullable=True) # name bos birakilabilir
+    config = Column(Text , nullable=True) # name bos birakilabilir
+    version = Column(Integer)
+    def __repr__(self):
+        return '<Name %r>' % self.name    
+
+engine = create_engine('sqlite:///ks8_configurator.db')
+
+db.create_all()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        return 'Go to next step!'     
+        check = k8sconfig.query.filter_by(name='ayse updated!').first()
+        if check == None:
+            conf = k8sconfig()
+            conf.name='ayse'
+            conf.config='123'
+            conf.version=1
+            db.session.add(conf)
+            db.session.commit()
+        else:
+            check.name='ayse'
+            check.config='123'
+            check.version=1
+            db.session.commit()                    
+        return 'Go to next step! 1'     
     return render_template('index.html')
 
 @app.route('/step-2/ip-configuration', methods=['GET', 'POST'])
@@ -50,7 +77,8 @@ def stream():
 
     return Response( read_process(), mimetype= 'text/event-stream' )
 
-if __name__ == "__main__":
+if __name__ == "__main__":    
     app.run(debug=True)
+
 
 
