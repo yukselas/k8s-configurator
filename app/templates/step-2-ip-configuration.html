@@ -1,0 +1,132 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}iSIM k8s Configurator v1{% endblock %}
+
+{% block styles %}
+{{super()}}
+<!--<link rel="stylesheet" href="{{ url_for('static', filename= 'css/normalize.css') }}">-->
+<style type="text/css">
+<!--
+.tablecell1 {
+    padding:5px;
+}
+-->
+</style>
+{% endblock %}
+
+
+
+{% block scripts %}
+<!-- <script type="text/javascript" src="{{ url_for('static', filename= 'js/modernizr-2.6.2.min.js') }}">	</script> -->
+
+{{super()}}
+{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-fixed-down">
+    <div class="container h-100">
+        <div class="row h-100 justify-content-center align-items-center">
+  <div class="page-header">
+    <h1>iSIM k8s Configurator <small>v1</small></h1>
+  </div>  
+</div>
+</div>  
+</div>
+
+  {% endblock %}  
+
+  {% block content %}
+
+  <div class="container h-100">
+    <div class="row h-100 justify-content-center align-items-center">  
+      <form method="POST">
+        <div class="form-group text-right">
+            <button type="button" class="btn btn-primary" onclick="window.location.href = '/step-3/review-configuration';">Next</button>
+        </div>        
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">IP Block</label>
+            <br /><br />
+            <table width="100%"> 
+                <tr>
+                    <td class="tablecell1">
+
+                        <div class="mb-3 row">
+                            <label for="Start" class="col-sm-2 col-form-label">Start</label>
+                            <div class="col-sm-10">
+                              <input type="text"  name="modules[]" class="form-control" id="Start">
+                            </div>
+                          </div>
+
+                    </td>
+                    <td class="tablecell1">
+
+                        <div class="mb-3 row">
+                            <label for="inputPassword" class="col-sm-2 col-form-label">End</label>
+                            <div class="col-sm-10">
+                              <input type="text" name="End" class="form-control" id="End">
+                            </div>
+                          </div>
+
+                    </td>
+                    <td class="tablecell1"></td>
+                </tr>
+                <tr>
+                    <td class="tablecell1">
+
+                        <div class="mb-3 row">
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Netmask</label>
+                            <div class="col-sm-10">
+                              <input type="text" name="Netmask" class="form-control" id="Netmask">
+                            </div>
+                          </div>
+
+                    </td>
+                    <td class="tablecell1">
+
+                        <div class="mb-3 row">
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Gateway</label>
+                            <div class="col-sm-10">
+                              <input type="text" name="Gateway" class="form-control" id="Gateway">
+                            </div>
+                          </div>
+
+                    </td>
+                    <td class="tablecell1"><button type="button" class="btn btn-outline-primary">Generate Metallb YAML</button></td>
+                </tr>
+                <tr>
+                    <td class="tablecell1">
+
+                        <div class="mb-3 row">
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Netmask</label>
+                            <div class="col-sm-10">
+                              bb
+                            </div>
+                          </div>
+
+                    </td>
+                    <td class="tablecell1">
+
+                        <div class="mb-3 row">
+                            <label for="inputPassword" class="col-sm-2 col-form-label">Gateway</label>
+                            <div class="col-sm-10">
+                              aa
+                            </div>
+                          </div>
+
+                    </td>
+                    <td class="tablecell1"></td>
+                </tr>
+
+            </table>
+          </div>
+          <div class="mb-3">
+            <br /><br />
+            <label for="exampleFormControlTextarea1" class="form-label">Metallb YAML: Review YAML Content</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="8"></textarea>
+          </div>
+          <div class="form-group">
+            <br /><br />
+    <button type="submit" class="btn btn-primary">Save</button>
+</div>   
+      </form>       
+</div></div>                  
+{% endblock %} 
