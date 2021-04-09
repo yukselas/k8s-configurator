@@ -6,48 +6,63 @@ from shelljob import proc
 
 from app.dbmodel import *
 
+#from app.dbmodel import db
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         gelen=''
         for key in request.form:
             if key in ["repourl","installtype"]:
-                pass
+                check = k8sconfig.query.filter_by(name=str(key)).first()                
+                if check:                    
+                    check.config=str(request.form[key])   
+                    print(str(key)+' == '+str(request.form[key])+' updated!')        
+                    db.session.commit()  
             else:                      
                 check = isimModule.query.filter_by(name=str(key)).first()                
                 if check:                    
-                    check.val=str(request.form[key])
-                    print(1)                
+                    check.val=str(request.form[key])            
                     db.session.commit()  
 
                       
             gelen+=str(key)+"="+request.form[key]+"<br>"
-        return str(gelen)
-        # check = k8sconfig.query.filter_by(name='ayse updated!').first()
-        # if check == None:
-        #     conf = k8sconfig()
-        #     conf.name='ayse'
-        #     conf.config='123'
-        #     conf.version=1
-        #     db.session.add(conf)
-        #     db.session.commit()
-        # else:
-        #     check.name='ayse'
-        #     check.config='123'
-        #     check.version=1
-        #     db.session.commit()               
-        # return 'Go to next step! 1'  
+        return gelen
      
-    modulelist=isimModule.query.all()              
-    return render_template('index.html', modulelist=modulelist, ham=str(modulelist))
+       
+     
+    repourl=str(k8sconfig.query.filter_by(name='repourl').first().config)
+    installtype=str(k8sconfig.query.filter_by(name='installtype').first().config)
+    radioonline=''
+    radiooffline=''
+    if installtype == 'online':
+        radioonline='checked'
+    if installtype == 'offline':
+        radiooffline='checked'
+    modulelist=isimModule.query.all()
+    configlist=k8sconfig.query.all()
+    return render_template('index.html', modulelist=modulelist, ham=str(modulelist), repourl=repourl, onlinechecked=radioonline, offlinechecked=radiooffline)
 
 @app.route('/step-2/ip-configuration', methods=['GET', 'POST'])
 def step2():
+    global db
     if request.method == 'POST':
-        hello = request.form.getlist('modules[]')
-        
-        return 'Go to next step!' + str(request.form) + "<br>Start: " +str(hello)
-    return render_template('step-2-ip-configuration.html')    
+        gelen=''
+        for key in request.form:
+            if key in ["ipblockstart","ipblockend","netmask","gateway"]:
+                check = k8sconfig.query.filter_by(name=str(key)).first()                
+                if check:                    
+                    check.config=str(request.form[key])           
+                    db.session.commit()                        
+            gelen+=str(key)+"="+request.form[key]+"<br>"
+        return gelen
+    ipblockstart=str(k8sconfig.query.filter_by(name='ipblockstart').first().config)
+    ipblockend=str(k8sconfig.query.filter_by(name='ipblockend').first().config)
+    netmask=str(k8sconfig.query.filter_by(name='netmask').first().config)
+    gateway=str(k8sconfig.query.filter_by(name='gateway').first().config)
+    configlist=k8sconfig.query.all()
+    return render_template('step-2-ip-configuration.html', ipblockstart=ipblockstart, ipblockend=ipblockend, netmask=netmask, gateway=gateway ) 
+     
 
 @app.route('/step-3/review-configuration', methods=['GET', 'POST'])
 def step3():

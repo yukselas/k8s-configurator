@@ -8,7 +8,7 @@ app = Flask(__name__)
 Bootstrap(app)
 app.config.from_mapping(
     SECRET_KEY=b'\xd6\x04\xbdj\xfe\xed$c\x1e@\xad\x0f\x13,@G')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ks8_configurator.db' 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///k8s_configurator.db' 
 # app.config['SQLALCHEMY_ECHO'] = True
 
 from app import initdb   

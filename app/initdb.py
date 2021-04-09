@@ -9,12 +9,58 @@ from sqlalchemy import create_engine
 db = SQLAlchemy(app)
 
 
-engine = create_engine('sqlite:///ks8_configurator.db')
-
-db.create_all()
 
 from app.dbmodel import isimModule
 
+from app.dbmodel import k8sconfig
+
+exists = k8sconfig.query.filter_by(name='gateway').first()
+if not exists:
+	conf = k8sconfig()
+	conf.name='gateway'
+	conf.config='3'
+	db.session.add(conf)
+	db.session.commit()
+
+exists = k8sconfig.query.filter_by(name='netmask').first()
+if not exists:
+	conf = k8sconfig()
+	conf.name='netmask'
+	conf.config='1'
+	db.session.add(conf)
+	db.session.commit()
+
+exists = k8sconfig.query.filter_by(name='ipblockstart').first()
+if not exists:
+	conf = k8sconfig()
+	conf.name='ipblockstart'
+	conf.config='123'
+	db.session.add(conf)
+	db.session.commit()
+
+exists = k8sconfig.query.filter_by(name='ipblockend').first()
+if not exists:
+	conf = k8sconfig()
+	conf.name='ipblockend'
+	conf.config = '4'
+	db.session.add(conf)
+	db.session.commit()
+
+exists = k8sconfig.query.filter_by(name='installtype').first()
+if not exists:
+	conf = k8sconfig()
+	conf.name='installtype'
+	conf.config = 'online'
+	db.session.add(conf)
+	db.session.commit()
+
+exists = k8sconfig.query.filter_by(name='repourl').first()
+if not exists:
+	conf = k8sconfig()
+	conf.name='repourl'
+	conf.config = 'https://blabla'
+	db.session.add(conf)
+	db.session.commit()	
 
 exists = isimModule.query.filter_by(name='arangodb').first()
 if not exists:

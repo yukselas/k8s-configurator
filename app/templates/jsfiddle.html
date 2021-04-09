@@ -1,0 +1,49 @@
+<input type="button" value="Generate NVR IPs" onclick="test1();" />
+<br />
+start:
+<input type="text" id="start" name="start" value="10.1.1.1" />
+<br />
+end:
+<input type="text" id="end" name="end" value="10.1.1.10" />
+<br />
+netmask:
+<input type="text" id="netmask" name="netmask" value="255.255.255.0" />
+<br />
+gateway:
+<input type="text" id="gateway" name="gateway" value="10.1.1.254" />
+<br />
+
+<div id="debug">
+</div>
+
+
+
+
+
+function test1() {
+	prefix=$('#start').val().split(".")[0]+"."+$('#start').val().split(".")[1]+'.'+$('#start').val().split(".")[2]+'.'
+	startip=$('#start').val().split(".")[3];
+  endip=$('#end').val().split(".")[3];
+  iplist=Array();
+  for (var i = parseInt(startip); i <= parseInt(endip); i += 1) {
+  	iplist.push(prefix+i);
+  }
+	console.log(iplist);
+  $('#debug').html('NVR IP 1: '+ iplist[iplist.length - 2]+'<br />'+'NVR IP 2: '+ iplist[iplist.length - 1]);
+}
+=================
+
+
+
+
+function generatemetallb() {
+	prefix=$('#ipblockstart').val().split(".")[0]+"."+$('#ipblockstart').val().split(".")[1]+'.'+$('#ipblockstart').val().split(".")[2]+'.'
+	startip=$('#ipblockstart').val().split(".")[3];
+  endip=$('#ipblockend').val().split(".")[3];
+  iplist=Array();
+  for (var i = parseInt(startip); i <= parseInt(endip); i += 1) {
+  	iplist.push(prefix+i);
+  }
+	console.log(iplist);
+  $('#exampleFormControlTextarea1').html('NVR IP 1: '+ iplist[iplist.length - 2]+'<br />'+'NVR IP 2: '+ iplist[iplist.length - 1]);
+}

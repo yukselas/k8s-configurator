@@ -16,7 +16,21 @@
 
 
 {% block scripts %}
-<!-- <script type="text/javascript" src="{{ url_for('static', filename= 'js/modernizr-2.6.2.min.js') }}">	</script> -->
+<!-- <script type="text/javascript" src="{{ url_for('static', filename= 'js/modernizr-2.6.2.min.js') }}"></script>	-->
+<script type="text/javascript">
+  function generatemetallb() {
+    prefix=$('#ipblockstart').val().split(".")[0]+"."+$('#ipblockstart').val().split(".")[1]+'.'+$('#ipblockstart').val().split(".")[2]+'.'
+    startip=$('#ipblockstart').val().split(".")[3];
+    endip=$('#ipblockend').val().split(".")[3];
+    iplist=Array();
+    for (var i = parseInt(startip); i <= parseInt(endip); i += 1) {
+      iplist.push(prefix+i);
+    }
+    $('#nvr1').html(iplist[iplist.length - 3]);
+    $('#nvr2').html(iplist[iplist.length - 2]);
+    $('#nvr3').html(iplist[iplist.length - 1]);
+}
+</script> 
 
 {{super()}}
 {% endblock %}
@@ -39,6 +53,10 @@
   <div class="container h-100">
     <div class="row h-100 justify-content-center align-items-center">  
       <form method="POST">
+      <input type="hidden" name="nvr1" value="" />
+      <input type="hidden" name="nvr2" value="" />
+      <input type="hidden" name="nvr3" value="" />
+
         <div class="form-group text-right">
             <button type="button" class="btn btn-primary" onclick="window.location.href = '/step-3/review-configuration';">Next</button>
         </div>        
@@ -52,7 +70,7 @@
                         <div class="mb-3 row">
                             <label for="Start" class="col-sm-2 col-form-label">Start</label>
                             <div class="col-sm-10">
-                              <input type="text"  name="modules[]" class="form-control" id="Start">
+                              <input type="text" name="ipblockstart" value="{{ ipblockstart }}" class="form-control" id="ipblockstart">
                             </div>
                           </div>
 
@@ -62,7 +80,7 @@
                         <div class="mb-3 row">
                             <label for="inputPassword" class="col-sm-2 col-form-label">End</label>
                             <div class="col-sm-10">
-                              <input type="text" name="End" class="form-control" id="End">
+                              <input type="text" name="ipblockend" value="{{ ipblockend }}" class="form-control" id="ipblockend">
                             </div>
                           </div>
 
@@ -75,7 +93,7 @@
                         <div class="mb-3 row">
                             <label for="inputPassword" class="col-sm-2 col-form-label">Netmask</label>
                             <div class="col-sm-10">
-                              <input type="text" name="Netmask" class="form-control" id="Netmask">
+                              <input type="text" name="netmask" value="{{ netmask }}" class="form-control" id="Netmask">
                             </div>
                           </div>
 
@@ -85,43 +103,80 @@
                         <div class="mb-3 row">
                             <label for="inputPassword" class="col-sm-2 col-form-label">Gateway</label>
                             <div class="col-sm-10">
-                              <input type="text" name="Gateway" class="form-control" id="Gateway">
+                              <input type="text" name="gateway" value="{{ gateway }}" class="form-control" id="Gateway">
                             </div>
                           </div>
 
                     </td>
-                    <td class="tablecell1"><button type="button" class="btn btn-outline-primary">Generate Metallb YAML</button></td>
+                    <td class="tablecell1"><button type="button" class="btn btn-outline-primary" onclick="generatemetallb();">Generate Metallb YAML</button></td>
                 </tr>
                 <tr>
                     <td class="tablecell1">
 
                         <div class="mb-3 row">
-                            <label for="inputPassword" class="col-sm-2 col-form-label">Netmask</label>
-                            <div class="col-sm-10">
-                              bb
+                            <label for="nvr1" class="col-sm-2 col-form-label">NVR IP 1</label>
+                            <div class="col-sm-10" id="nvr1">
+                              
                             </div>
                           </div>
 
                     </td>
                     <td class="tablecell1">
 
-                        <div class="mb-3 row">
-                            <label for="inputPassword" class="col-sm-2 col-form-label">Gateway</label>
-                            <div class="col-sm-10">
-                              aa
+                        <div class="mb-3 row">3                            <label for="nvr2" class="col-sm-2 col-form-label">NVR IP 2</label>
+                            <label for="nvr2" 2lass="col-33-2 col-form-label">NVR IP 2</label>
+                            <div class="col-sm-10" id="nv22">
+                         3  <div class="col-sm-10" id="nvr2">
+                              
                             </div>
                           </div>
 
                     </td>
                     <td class="tablecell1"></td>
                 </tr>
+                <tr>
+                    <td class="tablecell1">
 
+                        <div class="mb-3 row">
+                            <label for="nvr3" class="col-sm-2 col-form-label">NVR IP 3</label>
+                            <div class="col-sm-10" id="nvr3">
+                              
+                            </div>
+                          </div>
+
+                    </td>
+                    <td class="tablecell1">
+
+
+
+                    </td>
+                    <td class="tablecell1"></td>
+                </tr>
             </table>
           </div>
           <div class="mb-3">
             <br /><br />
             <label for="exampleFormControlTextarea1" class="form-label">Metallb YAML: Review YAML Content</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="8"></textarea>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="19">
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: metallb-system
+  name: config
+data:
+  config: |
+    address-pools:
+    - name: isim-static-ip-space
+      protocol: layer2
+      addresses:
+      - 172.16.160.110-172.16.160.130
+      auto-assign: false
+    - name: isim-ip-space
+      protocol: layer2
+      addresses:
+      - 172.16.160.131-172.16.160.140
+            
+            </textarea>
           </div>
           <div class="form-group">
             <br /><br />

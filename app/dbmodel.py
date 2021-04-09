@@ -27,6 +27,7 @@ class k8sconfig(db.Model):
         return '<Name %r>' % self.name    
 
 
+db.create_all()
 
 
 
