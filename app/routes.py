@@ -3,10 +3,15 @@ from app import app
 from flask import Flask, render_template, request, Response
 from flask_bootstrap import Bootstrap
 from shelljob import proc
-
+from cidrize import cidrize
 from app.dbmodel import *
 
 #from app.dbmodel import db
+
+def genmultusnetstr(nvriprange,iprange,gateway):
+    mycidr=str(cidrize(iprange)[0])
+    multusnet=nvriprange+','+mycidr+','+gateway
+    return multusnet
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -67,6 +72,7 @@ def step2():
 @app.route('/step-3/review-configuration', methods=['GET', 'POST'])
 def step3():
     if request.method == 'POST':
+
         return 'Go to next step!'     
     return render_template('step-3-review-configuration.html')  
 
