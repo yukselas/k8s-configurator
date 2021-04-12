@@ -19,3 +19,13 @@ haydaintegstring=brand%Proline,model%default,url%http://hayda-integration.defaul
 
 
 default bilgileri içeren bir modules.conf dosyası iletebilir misiniz?
+
+
+9 nisan 
+bir tane fonksiyon iki parametre alicak bir: ip iki : netmask sonra bunlari bunlari cidr olarak donecek
+
+orn: 
+
+print(test('192.168.1.1-192.168.1.255','255.255.255.0'))
+
+192.168.1.0/24
