@@ -2,7 +2,6 @@
 *.log
 *.pot
 *.pyc
-__pycache__
 media
 
 
@@ -11,6 +10,7 @@ media
 *$py.class
 
 # Distribution / packaging
+__pycache__/
 .Python build/
 develop-eggs/
 dist/
