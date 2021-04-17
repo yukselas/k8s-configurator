@@ -50,15 +50,15 @@
     <div class="form-group">
         <label>Installation Type:</label><br />
         <label class="radio-inline">
-  <input type="radio" name="installtype" id="inlineRadio1" value="online" {{ onlinechecked }} /> Online
+  <input type="radio" name="installtype" id="inlineRadio1" onclick="$('#repourl').val('https://yukselas@bitbucket.org/isimplatform/fullisimstack-helm.git');" value="online" {{ onlinechecked }} /> Online
 </label>
 <label class="radio-inline">
-  <input type="radio" name="installtype" id="inlineRadio2" value="offline" {{ offlinechecked }} /> Offline
+  <input type="radio" name="installtype" id="inlineRadio2" onclick="$('#repourl').val('/home/isim/fullisimstack-helm');" value="offline" {{ offlinechecked }} /> Offline
 </label>
   </div>
     <div class="form-group">
     <label for="repourl">Repo Url:</label>
-    <input type="text" name="repourl" value="{{ repourl }}" class="form-control" id="repourl" placeholder="<url> or <folder>">
+    <input type="text" name="repourl" id="repourl" value="{{ repourl }}" class="form-control" id="repourl" placeholder="<url> or <folder>">
   </div>
   <div class="form-group" style="overflow-y: scroll; height:400px"> 
     <table class="table table-striped table-bordered">

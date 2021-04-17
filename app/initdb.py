@@ -14,11 +14,39 @@ from app.dbmodel import isimModule
 
 from app.dbmodel import k8sconfig
 
+
+
+exists = k8sconfig.query.filter_by(name='nvr1').first()
+if not exists:
+	conf = k8sconfig()
+	conf.name='nvr1'
+	conf.config='172.16.166.148'
+	db.session.add(conf)
+	db.session.commit()
+
+exists = k8sconfig.query.filter_by(name='nvr2').first()
+if not exists:
+	conf = k8sconfig()
+	conf.name='nvr2'
+	conf.config='172.16.166.149'
+	db.session.add(conf)
+	db.session.commit()
+
+exists = k8sconfig.query.filter_by(name='nvr3').first()
+if not exists:
+	conf = k8sconfig()
+	conf.name='nvr3'
+	conf.config='172.16.166.150'
+	db.session.add(conf)
+	db.session.commit()
+
+
+
 exists = k8sconfig.query.filter_by(name='gateway').first()
 if not exists:
 	conf = k8sconfig()
 	conf.name='gateway'
-	conf.config='3'
+	conf.config='172.16.166.1'
 	db.session.add(conf)
 	db.session.commit()
 
@@ -26,7 +54,7 @@ exists = k8sconfig.query.filter_by(name='netmask').first()
 if not exists:
 	conf = k8sconfig()
 	conf.name='netmask'
-	conf.config='1'
+	conf.config='255.255.255.0'
 	db.session.add(conf)
 	db.session.commit()
 
@@ -34,7 +62,7 @@ exists = k8sconfig.query.filter_by(name='ipblockstart').first()
 if not exists:
 	conf = k8sconfig()
 	conf.name='ipblockstart'
-	conf.config='123'
+	conf.config='172.16.166.100'
 	db.session.add(conf)
 	db.session.commit()
 
@@ -42,7 +70,7 @@ exists = k8sconfig.query.filter_by(name='ipblockend').first()
 if not exists:
 	conf = k8sconfig()
 	conf.name='ipblockend'
-	conf.config = '4'
+	conf.config = '172.16.166.150'
 	db.session.add(conf)
 	db.session.commit()
 
@@ -58,7 +86,7 @@ exists = k8sconfig.query.filter_by(name='repourl').first()
 if not exists:
 	conf = k8sconfig()
 	conf.name='repourl'
-	conf.config = 'https://blabla'
+	conf.config = 'https://yukselas@bitbucket.org/isimplatform/fullisimstack-helm.git'
 	db.session.add(conf)
 	db.session.commit()	
 
@@ -67,7 +95,7 @@ if not exists:
 	conf = isimModule()
 	conf.name='arangodb'
 	conf.defaultval = 'true'
-	conf.val='0,0'
+	conf.val='0,1.0.92'
 	db.session.add(conf)
 	db.session.commit()
 

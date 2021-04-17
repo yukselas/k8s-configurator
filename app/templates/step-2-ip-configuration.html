@@ -9,6 +9,10 @@
 .tablecell1 {
     padding:5px;
 }
+body {
+       width: 100%;
+       margin: 0%;    
+}
 -->
 </style>
 {% endblock %}
@@ -18,7 +22,7 @@
 {% block scripts %}
 <!-- <script type="text/javascript" src="{{ url_for('static', filename= 'js/modernizr-2.6.2.min.js') }}"></script>	-->
 <script type="text/javascript">
-  function generatemetallb() {
+  function generatenvrips() {
     prefix=$('#ipblockstart').val().split(".")[0]+"."+$('#ipblockstart').val().split(".")[1]+'.'+$('#ipblockstart').val().split(".")[2]+'.'
     startip=$('#ipblockstart').val().split(".")[3];
     endip=$('#ipblockend').val().split(".")[3];
@@ -29,6 +33,9 @@
     $('#nvr1').html(iplist[iplist.length - 3]);
     $('#nvr2').html(iplist[iplist.length - 2]);
     $('#nvr3').html(iplist[iplist.length - 1]);
+    $('#nvrform1').val(iplist[iplist.length - 3]);
+    $('#nvrform2').val(iplist[iplist.length - 2]);
+    $('#nvrform3').val(iplist[iplist.length - 1]);
 }
 </script> 
 
@@ -50,15 +57,15 @@
 
   {% block content %}
 
-  <div class="container h-100">
+  <div class="container h-100 .container-fluid">
     <div class="row h-100 justify-content-center align-items-center">  
       <form method="POST">
-      <input type="hidden" name="nvr1" value="" />
-      <input type="hidden" name="nvr2" value="" />
-      <input type="hidden" name="nvr3" value="" />
+      <input type="hidden" id="nvrform1" name="nvr1" value="{{ nvr1val }}" />
+      <input type="hidden" id="nvrform2" name="nvr2" value="{{ nvr2val }}" />
+      <input type="hidden" id="nvrform3" name="nvr3" value="{{ nvr3val }}" />
 
         <div class="form-group text-right">
-            <button type="button" class="btn btn-primary" onclick="window.location.href = '/step-3/review-configuration';">Next</button>
+            <button type="button" class="btn btn-primary" onclick="window.location.href = '/step-3/perform-installation';">Next</button>
         </div>        
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">IP Block</label>
@@ -108,28 +115,25 @@
                           </div>
 
                     </td>
-                    <td class="tablecell1"><button type="button" class="btn btn-outline-primary" onclick="generatemetallb();">Generate Metallb YAML</button></td>
+                    <td class="tablecell1"><button type="button" class="btn btn-outline-primary" onclick="generatenvrips();">Generate NVR IPs</button></td>
                 </tr>
                 <tr>
                     <td class="tablecell1">
 
                         <div class="mb-3 row">
                             <label for="nvr1" class="col-sm-2 col-form-label">NVR IP 1</label>
-                            <div class="col-sm-10" id="nvr1">
-                              
+                            <div class="col-sm-10" id="nvr1">{{ nvr1val }}                              
                             </div>
                           </div>
 
                     </td>
                     <td class="tablecell1">
 
-                        <div class="mb-3 row">3                            <label for="nvr2" class="col-sm-2 col-form-label">NVR IP 2</label>
-                            <label for="nvr2" 2lass="col-33-2 col-form-label">NVR IP 2</label>
-                            <div class="col-sm-10" id="nv22">
-                         3  <div class="col-sm-10" id="nvr2">
-                              
+                      <div class="mb-3 row">
+                            <label for="nvr1" class="col-sm-2 col-form-label">NVR IP 2</label>
+                            <div class="col-sm-10" id="nvr2">{{ nvr2val }}                       
                             </div>
-                          </div>
+                      </div>
 
                     </td>
                     <td class="tablecell1"></td>
@@ -137,10 +141,9 @@
                 <tr>
                     <td class="tablecell1">
 
-                        <div class="mb-3 row">
-                            <label for="nvr3" class="col-sm-2 col-form-label">NVR IP 3</label>
-                            <div class="col-sm-10" id="nvr3">
-                              
+                      <div class="mb-3 row">
+                            <label for="nvr1" class="col-sm-2 col-form-label">NVR IP 3</label>
+                            <div class="col-sm-10" id="nvr3">{{ nvr3val }}                          
                             </div>
                           </div>
 
@@ -156,27 +159,24 @@
           </div>
           <div class="mb-3">
             <br /><br />
-            <label for="exampleFormControlTextarea1" class="form-label">Metallb YAML: Review YAML Content</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="19">
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  namespace: metallb-system
-  name: config
-data:
-  config: |
-    address-pools:
-    - name: isim-static-ip-space
-      protocol: layer2
-      addresses:
-      - 172.16.160.110-172.16.160.130
-      auto-assign: false
-    - name: isim-ip-space
-      protocol: layer2
-      addresses:
-      - 172.16.160.131-172.16.160.140
-            
-            </textarea>
+            <div class="row w-100">
+  <div class="col-sm-4 w-50">
+    <label for="exampleFormControlTextarea1" class="form-label">modules.conf: Review module settings</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="19">{% for data in modulelist %}{{ data.name }}={{ data.val }}
+{% endfor %}
+            </textarea>  
+  </div>
+  <div class="col-sm-4 w-50">
+    <label for="exampleFormControlTextarea1" class="form-label">metallb-config.yaml: Review YAML Content</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="19">{{ metallbconf }}
+            </textarea>  
+            <br />
+[*] First ip block generated %20 of ip range<br />
+[*] Second ip block generated %80 of ip range<br />
+[*] Last 3 NVR IPs excluded in ip range<br />
+  </div>
+</div> 
+ 
           </div>
           <div class="form-group">
             <br /><br />

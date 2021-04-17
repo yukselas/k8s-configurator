@@ -2,3 +2,4 @@ cidrize
 sqlalchemy
 shelljob
 flask_bootstrap
+flask_sqlalchemy

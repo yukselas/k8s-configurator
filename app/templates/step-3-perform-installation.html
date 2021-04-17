@@ -18,6 +18,25 @@
 {% block scripts %}
 <!-- <script type="text/javascript" src="{{ url_for('static', filename= 'js/modernizr-2.6.2.min.js') }}">	</script> -->
 
+{% if runcmd %}
+<script>
+    if(typeof(EventSource) !== "undefined") {
+      var source = new EventSource("stream?repourl={{ repourl }}&commands={{ commands }}");
+      var re = new RegExp(".*exit.*");
+      source.onmessage = function(event) {
+        document.getElementById("output").innerHTML += event.data + "<br>";        
+        if (re.test(event.data)) {
+          source.close();
+          console.log("stop!!!");
+        } else {
+            console.log("Go head!");
+        }
+      };
+    } else {
+      document.getElementById("output").innerHTML = "Sorry, your browser does not support server-sent events...";
+    }
+    </script>
+{% endif %}
 {{super()}}
 {% endblock %}
 
@@ -35,7 +54,7 @@
   {% endblock %}  
 
   {% block content %}
-
+<form method="POST" id="command" name="command">
   <div class="container h-100">
     <div class="row h-100 justify-content-center align-items-center">  
         <div class="form-group text-right">
@@ -43,12 +62,18 @@
         </div> 
 <div class="mb-3">
    
-    <label for="review" class="form-label">Review</label>
-    <textarea class="form-control" id="exampleFormControlTextarea1" rows="8"></textarea>
+    <label for="review" class="form-label">Installation:</label>
+<textarea class="form-control" name="commands" id="exampleFormControlTextarea1" rows="3">
+sudo tcpdump -i any -c 50
+</textarea>
   </div>
   <div class="form-group">
             <br /><br />
-    <button type="button" class="btn btn-primary">Save</button>
+    <button type="submit" class="btn btn-primary" id="run" onclick="runcmd();">Run</button>
 </div>   
-</div></div>                  
+Output:
+<div id="output" style="height:200px; overflow:scroll; background-color: #e5e5e5; padding:10px;"></div>    
+</div></div>   
+</form>       
+    
 {% endblock %} 

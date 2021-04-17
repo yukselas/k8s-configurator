@@ -5,8 +5,44 @@ from flask_bootstrap import Bootstrap
 from shelljob import proc
 from cidrize import cidrize
 from app.dbmodel import *
+import os
 
 #from app.dbmodel import db
+
+'''Usage:
+    getrange('<range>','<percent>','<exclude-last-X-items>')
+'''
+def getrange(iprange,percent,excludelast):
+    startip=iprange.split('-')[0]
+    start=startip.split('.')[3]
+    endip=iprange.split('-')[1]
+    end=endip.split('.')[3]
+    prefix=startip.split('.')[0]+'.'+startip.split('.')[1]+'.'+startip.split('.')[2]+'.'
+    iplist=[]
+    for ip in range(int(start),int(end)+1):
+        iplist.append(ip)
+    iplist=iplist[0:(-1*excludelast)]
+    c=len(iplist)
+    sc=float(c*percent/100)
+    se=float(c*(100-percent)/100)
+    #print(c)
+    #print(sc)
+    #print(se)
+    i=0
+    firstipblock=[]
+    secondipblock=[]
+    for ip in iplist:
+        if i<sc:
+            firstipblock.append(prefix+str(ip))
+        else:
+            secondipblock.append(prefix+str(ip))
+        i=i+1
+    #print(iplist)
+    #print(firstipblock)
+    #print(secondipblock)
+    return firstipblock[0]+'-'+firstipblock[-1], secondipblock[0]+'-'+secondipblock[-1]
+
+
 
 def genmultusnetstr(nvriprange,iprange,gateway):
     mycidr=str(cidrize(iprange)[0])
@@ -54,7 +90,7 @@ def step2():
     if request.method == 'POST':
         gelen=''
         for key in request.form:
-            if key in ["ipblockstart","ipblockend","netmask","gateway"]:
+            if key in ["ipblockstart","ipblockend","netmask","gateway","nvr1","nvr2","nvr3"]:
                 check = k8sconfig.query.filter_by(name=str(key)).first()                
                 if check:                    
                     check.config=str(request.form[key])           
@@ -65,33 +101,65 @@ def step2():
     ipblockend=str(k8sconfig.query.filter_by(name='ipblockend').first().config)
     netmask=str(k8sconfig.query.filter_by(name='netmask').first().config)
     gateway=str(k8sconfig.query.filter_by(name='gateway').first().config)
+    nvr1val=str(k8sconfig.query.filter_by(name='nvr1').first().config)
+    nvr2val=str(k8sconfig.query.filter_by(name='nvr2').first().config)
+    nvr3val=str(k8sconfig.query.filter_by(name='nvr3').first().config)
+    modulelist=isimModule.query.all()
     configlist=k8sconfig.query.all()
-    return render_template('step-2-ip-configuration.html', ipblockstart=ipblockstart, ipblockend=ipblockend, netmask=netmask, gateway=gateway ) 
+    # create first block from %20, exclude last 3 items
+    firstrange, secondrange = getrange(ipblockstart+'-'+ipblockend,20,3)
+    metallbconf='''apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: metallb-system
+  name: config
+data:
+  config: |
+    address-pools:
+    - name: isim-static-ip-space
+      protocol: layer2
+      addresses:
+      - '''+firstrange+'''
+      auto-assign: false
+    - name: isim-ip-space
+      protocol: layer2
+      addresses:
+      - '''+secondrange
+
+    return render_template('step-2-ip-configuration.html', metallbconf=metallbconf, modulelist=modulelist, ipblockstart=ipblockstart, ipblockend=ipblockend, netmask=netmask, gateway=gateway, nvr1val=nvr1val, nvr2val=nvr2val, nvr3val=nvr3val ) 
      
 
-@app.route('/step-3/review-configuration', methods=['GET', 'POST'])
+@app.route('/step-3/perform-installation', methods=['GET', 'POST'])
 def step3():
-    if request.method == 'POST':
+    runcmd=False
+    commands=''
 
-        return 'Go to next step!'     
-    return render_template('step-3-review-configuration.html')  
-
-@app.route('/step-4/perform-installation', methods=['GET', 'POST'])
-def step4():
-    if request.method == 'POST':
-        return 'Go to next step!'     
-    return render_template('step-4-perform-installation.html') 
+    if request.method == 'POST': 
+        commands=request.form['commands'].replace('\r\n',';')
+        runcmd=True
+    repourl=str(k8sconfig.query.filter_by(name='repourl').first().config) 
+    
+    return render_template('step-3-perform-installation.html', runcmd=runcmd, commands=commands, repourl=repourl)
 
 
-@app.route( '/stream' )
+
+@app.route( '/step-3/stream')
 def stream():
+    mycmd=[]
+    cwd=os.getcwd()
+    repourl=request.args['repourl']
+    os.chdir(repourl)    
+    for cmd in request.args['commands'].split(' '):
+        mycmd.append(cmd)
+    #return str(mycmd)
     g = proc.Group()
-    p = g.run( [ "bash", "test.sh" ] )
+    p = g.run( mycmd )
+
 
     def read_process():
         while g.is_pending():
             lines = g.readlines()
             for proc, line in lines:
                 yield "data: " +str(line) +"\n\n"
-
+    os.chdir(cwd)
     return Response( read_process(), mimetype= 'text/event-stream' )
