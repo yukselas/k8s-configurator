@@ -16,6 +16,23 @@ from app.dbmodel import k8sconfig
 
 
 
+exists = k8sconfig.query.filter_by(name='bitbucketusername').first()
+if not exists:
+	conf = k8sconfig()
+	conf.name='bitbucketusername'
+	conf.config=''
+	db.session.add(conf)
+	db.session.commit()
+
+exists = k8sconfig.query.filter_by(name='bitbucketpassword').first()
+if not exists:
+	conf = k8sconfig()
+	conf.name='bitbucketpassword'
+	conf.config=''
+	db.session.add(conf)
+	db.session.commit()	
+
+
 exists = k8sconfig.query.filter_by(name='nvr1').first()
 if not exists:
 	conf = k8sconfig()
@@ -78,7 +95,7 @@ exists = k8sconfig.query.filter_by(name='installtype').first()
 if not exists:
 	conf = k8sconfig()
 	conf.name='installtype'
-	conf.config = 'online'
+	conf.config = 'offline'
 	db.session.add(conf)
 	db.session.commit()
 
@@ -86,7 +103,7 @@ exists = k8sconfig.query.filter_by(name='repourl').first()
 if not exists:
 	conf = k8sconfig()
 	conf.name='repourl'
-	conf.config = 'https://yukselas@bitbucket.org/isimplatform/fullisimstack-helm.git'
+	conf.config = 'bitbucket.org/isimplatform/fullisimstack-helm.git'
 	db.session.add(conf)
 	db.session.commit()	
 

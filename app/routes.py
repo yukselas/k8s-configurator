@@ -54,7 +54,7 @@ def index():
     if request.method == 'POST':
         gelen=''
         for key in request.form:
-            if key in ["repourl","installtype"]:
+            if key in ["repourl","installtype","bitbucketusername","bitbucketpassword"]:
                 check = k8sconfig.query.filter_by(name=str(key)).first()                
                 if check:                    
                     check.config=str(request.form[key])   
@@ -68,21 +68,26 @@ def index():
 
                       
             gelen+=str(key)+"="+request.form[key]+"<br>"
-        return gelen
+        #return gelen
      
        
      
     repourl=str(k8sconfig.query.filter_by(name='repourl').first().config)
+    bitbucketusername=str(k8sconfig.query.filter_by(name='bitbucketusername').first().config)
+    bitbucketpassword=str(k8sconfig.query.filter_by(name='bitbucketpassword').first().config)
+    
     installtype=str(k8sconfig.query.filter_by(name='installtype').first().config)
     radioonline=''
     radiooffline=''
     if installtype == 'online':
         radioonline='checked'
+        installonline=True
     if installtype == 'offline':
         radiooffline='checked'
+        installonline=False
     modulelist=isimModule.query.all()
     configlist=k8sconfig.query.all()
-    return render_template('index.html', modulelist=modulelist, ham=str(modulelist), repourl=repourl, onlinechecked=radioonline, offlinechecked=radiooffline)
+    return render_template('index.html', installonline=installonline, modulelist=modulelist,bitbucketusername=bitbucketusername, bitbucketpassword=bitbucketpassword, ham=str(modulelist), repourl=repourl, onlinechecked=radioonline, offlinechecked=radiooffline)
 
 @app.route('/step-2/ip-configuration', methods=['GET', 'POST'])
 def step2():
@@ -96,7 +101,7 @@ def step2():
                     check.config=str(request.form[key])           
                     db.session.commit()                        
             gelen+=str(key)+"="+request.form[key]+"<br>"
-        return gelen
+        #return gelen
     ipblockstart=str(k8sconfig.query.filter_by(name='ipblockstart').first().config)
     ipblockend=str(k8sconfig.query.filter_by(name='ipblockend').first().config)
     netmask=str(k8sconfig.query.filter_by(name='netmask').first().config)
@@ -146,8 +151,16 @@ def step3():
         f.close()
         os.chmod(runfile, 0o755)
         runcmd=True
+
     repourl=str(k8sconfig.query.filter_by(name='repourl').first().config) 
-    return render_template('step-3-perform-installation.html', runcmdstr=str(runcmd), runcmd=runcmd, commands=commands, repourl=repourl)
+    bitbucketusername=str(k8sconfig.query.filter_by(name='bitbucketusername').first().config)
+    bitbucketpassword=str(k8sconfig.query.filter_by(name='bitbucketpassword').first().config)
+        
+    if commands=='':
+        defaultcommands="rm -fr fullisimstack-helm/\r\ngit clone 'https://"+bitbucketusername+":"+bitbucketpassword+"@"+repourl+"' -b master\r\ncd fullisimstack-helm\r\n./install_isim.sh start"
+    else:
+        defaultcommands=''    
+    return render_template('step-3-perform-installation.html', defaultcmd=defaultcommands, runcmdstr=str(runcmd), runcmd=runcmd, commands=commands, repourl=repourl)
 
 
 
