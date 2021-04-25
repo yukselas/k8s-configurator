@@ -135,11 +135,19 @@ def step3():
     commands=''
 
     if request.method == 'POST': 
-        commands=request.form['commands'].replace('\r\n',';')
+        commandsarr=str(request.form['commands']).split('\r\n')
+        commands=str(request.form['commands'])
+        runfile='/tmp/installer-batch-script.sh'
+        os.system('echo>'+runfile)
+        f=open(runfile,'a', encoding='utf-8')
+        for line in commandsarr:
+            f.write(line.strip()+"\n")
+        f.write("\necho exit; exit 0")
+        f.close()
+        os.chmod(runfile, 0o755)
         runcmd=True
     repourl=str(k8sconfig.query.filter_by(name='repourl').first().config) 
-    
-    return render_template('step-3-perform-installation.html', runcmd=runcmd, commands=commands, repourl=repourl)
+    return render_template('step-3-perform-installation.html', runcmdstr=str(runcmd), runcmd=runcmd, commands=commands, repourl=repourl)
 
 
 
@@ -147,13 +155,11 @@ def step3():
 def stream():
     mycmd=[]
     cwd=os.getcwd()
-    repourl=request.args['repourl']
-    os.chdir(repourl)    
-    for cmd in request.args['commands'].split(' '):
-        mycmd.append(cmd)
+    repourl=request.args['repourl']    
+
     #return str(mycmd)
     g = proc.Group()
-    p = g.run( mycmd )
+    p = g.run( ["bash", "/tmp/installer-batch-script.sh"])
 
 
     def read_process():
@@ -161,5 +167,5 @@ def stream():
             lines = g.readlines()
             for proc, line in lines:
                 yield "data: " +str(line) +"\n\n"
-    os.chdir(cwd)
+
     return Response( read_process(), mimetype= 'text/event-stream' )

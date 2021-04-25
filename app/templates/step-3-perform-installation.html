@@ -9,6 +9,7 @@
 .tablecell1 {
     padding:5px;
 }
+
 -->
 </style>
 {% endblock %}
@@ -21,7 +22,7 @@
 {% if runcmd %}
 <script>
     if(typeof(EventSource) !== "undefined") {
-      var source = new EventSource("stream?repourl={{ repourl }}&commands={{ commands }}");
+      var source = new EventSource("stream?repourl={{ repourl }}");
       var re = new RegExp(".*exit.*");
       source.onmessage = function(event) {
         document.getElementById("output").innerHTML += event.data + "<br>";        
@@ -63,13 +64,13 @@
 <div class="mb-3">
    
     <label for="review" class="form-label">Installation:</label>
-<textarea class="form-control" name="commands" id="exampleFormControlTextarea1" rows="3">
-sudo tcpdump -i any -c 50
-</textarea>
+<textarea class="form-control" name="commands" id="exampleFormControlTextarea1" rows="3">{{ commands }}</textarea>
   </div>
   <div class="form-group">
             <br /><br />
     <button type="submit" class="btn btn-primary" id="run" onclick="runcmd();">Run</button>
+    <br />
+    Processing: {{ runcmdstr }}
 </div>   
 Output:
 <div id="output" style="height:200px; overflow:scroll; background-color: #e5e5e5; padding:10px;"></div>    
